@@ -1,2 +1,2 @@
 #!/bin/bash
-ls -atn /boot .. .
+ls -aln . .. /boot
