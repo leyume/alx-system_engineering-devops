@@ -8,20 +8,20 @@
 
 This is a simple web infrastructure that hosts a website that is reachable via `www.foobar.com`. There are no firewalls or SSL certificates for protecting the server's network. Each component (database, application server) has to share the resources (CPU, RAM, and SSD) provided by the server.
 
+<img src="https://raw.githubusercontent.com/leyume/alx-system_engineering-devops/main/0x09-web_infrastructure_design/images/ALX0.png" />
+
 ## Specifics About This Infrastructure
 
-+ What a server is.<br/>A server is a computer hardware or software that provides services to other computers, which are usually referred to as *clients*.
++ What a server is.<br/>The Server is a dedicated computer that provides services to clients like desktop computer, workstations or mobile devices. It’s a centralised machine where all these clients connect to, over the internet or a local area network. It contains different features to make it provide the required services like the Web server, Application Server and Database as seen above..
 
-+ The role of the domain name.<br/>To provide a human-friendly alias for an IP Address. For example, the domain name `www.wikipedia.org` is easier to recognize and remember than `91.198.174.192`. The IP address and domain name alias is mapped in the Domain Name System (DNS)
++ The role of the domain name.<br/>To provide a human-friendly alias for an IP Address. The Domain Name, foobar.com, provide an easy way to recognize and memorize than using the numerical address, 8.8.8.8, to access Internet resources.
+The DNS Record for www in www.foobar.com is A or AAAA Record The IP address and domain name alias is mapped in the Domain Name System (DNS)
 
-+ The type of DNS record `www` is in `www.foobar.com`.<br/>`www.foobar.com` uses an **A record**. This can be checked by running `dig www.foobar.com`.<br/>**Note:** the results might be different but for the infrastructure in this design, an **A** record is used.<br/>
-<i>Address Mapping record (A Record)—also known as a DNS host record, stores a hostname and its corresponding IPv4 address.</i>
++ The role of the web server.<br/>The Web Server is a software in the Server that organises and serves web contents. This software receives the request from the client and serve the web content (as a response) after the getting relevant information from the App server and Database. Examples include Nginx and Apache.
 
-+ The role of the web server.<br/>The web server is a software/hardware that accepts requests via HTTP or secure HTTP (HTTPS) and responds with the content of the requested resource or an error messsage.
++ The role of the application server.<br/>is a server design to run specific applications like PHP, Java, NodeJS. It receive request from the Web server and the process the request (and connects to a Database if required) and sends a response back to the Web server to be served to the client.
 
-+ The role of the application server.<br/>To install, operate and host applications and associated services for end users, IT services and organizations and facilitates the hosting and delivery of high-end consumer or business applications
-
-+ The role of the database.<br/>To maintain a collection of organized information that can easily be accessed, managed and updated
++ The role of the database.<br/>The Database is an organized collection of structured information, or data, typically stored electronically in the Server. It provides the App server with required info to be delivered to the client.
 
 + What the server uses to communicate with the client (computer of the user requesting the website).<br/>Communication between the client and the server occurs over the internet network through the TCP/IP protocol suite.
 
@@ -33,10 +33,19 @@ This is a simple web infrastructure that hosts a website that is reachable via `
 
 + Cannot scale if there's too much incoming traffic.<br/>It would be hard to scale this infrastructure becauses one server contains the required components. The server can quickly run out of resources or slow down when it starts receiving a lot of requests.
 
+
+<br />
+
+---
+
+<br />
+
 # 1: Distributed Web Infrastructure
 ## Description
 
 This is a distributed web infrastructure that atttempts to reduce the traffic to the primary server by distributing some of the load to a replica server with the aid of a server responsible for balancing the load between the two servers (primary and replica).
+
+<img src="https://raw.githubusercontent.com/leyume/alx-system_engineering-devops/main/0x09-web_infrastructure_design/images/ALX1.png" />
 
 ## Specifics About This Infrastructure
 
@@ -51,11 +60,19 @@ This is a distributed web infrastructure that atttempts to reduce the traffic to
 + Security issues.<br/>The data transmitted over the network isn't encrypted using an SSL certificate so hackers can spy on the network. There is no way of blocking unauthorized IPs since there's no firewall installed on any server.
 + No monitoring.<br/>We have no way of knowing the status of each server since they're not being monitored.
 
+<br />
+
+---
+
+<br />
+
 # 2: Secured and Monitored Web Infrastructure
 
 ## Description
 
 This is a 3-server web infrastructure that is secured, monitored, and serves encrypted traffic.
+
+<img src="https://raw.githubusercontent.com/leyume/alx-system_engineering-devops/main/0x09-web_infrastructure_design/images/ALX2.png" />
 
 ## Specifics About This Infrastructure
 
@@ -69,15 +86,24 @@ This is a 3-server web infrastructure that is secured, monitored, and serves enc
 + Having one MySQL server is an issue because it is not scalable and can act as a single point of failure for the web infrastructure.
 + Having servers with all the same components would make the components contend for resources on the server like CPU, Memory, I/O, etc., which can lead to poor performance and also make it difficult to locate the source of the problem. A setup such as this is not easily scalable. 
 
+<br />
+
+---
+<br />
+
 # 3: Scaled Up Web Infrastructure
 ## Description
 
-This web infrastructure is a scaled up version of the infrastructure described Secured and Monitored Web Infrastructure. In this version, all SPOFs have been removed and each of the major components (web server, application server, and database servers) have been moved to separate GNU/Linux servers. The SSL protection isn't terminated at the load-balancer and each server's network is protected with a firewall and they're also monitored.
+This web infrastructure is a scaled up version of the infrastructure described Secured and Monitored Web Infrastructure. In this version, all SPOFs have been removed and each of the major components (web server, application server, and database servers) have been moved to separate servers. The SSL protection isn't terminated at the load-balancer and each server's network is protected with a firewall and they're also monitored.
+
+<img src="https://raw.githubusercontent.com/leyume/alx-system_engineering-devops/main/0x09-web_infrastructure_design/images/ALX3.png" />
 
 ## Specifics About This Infrastructure
 
 + The addition of a firewall between each server.<br/>This protects each server from unwanted and unauthorized users rather than protecting a single server.
 
-## Issues With This Infrastructure
++ Load balancer<br>
+An additional load balance is added to act as a backup if the one them fails and the equally share the load and distribute the request to the servers.
 
-+ High maintenance costs.<br/>Moving each of the major components to its own server, means that more servers would have to be bought and the company's electricity bill would rise along with the introduction of new servers. Some of the company's funds would have to be used to buy the servers and pay for the electricity consumption needed to keep the servers (including the new and old ones) running.
++ Adding another server<br>
+Another server is added to make the system more robust. The server structure is now different. The Database now reside on two servers, while the App server reside on the remaining two. This will allow appropriate servers to be used for each service, enabling proper monitoring, i.e knowing what needs to be scaled per time - the Database or the App server with the codebase. Each server still have Web server to make the server accessible by a client if needed. But the Server 1 and Server 3 are going to be the main entries for requests while the communicate with Server 2 or Server 4 if data is needed (created, read, updated or deleted) from the Database.
