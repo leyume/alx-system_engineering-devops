@@ -4,10 +4,9 @@
 import requests
 import sys
 
+baseUrl = "https://jsonplaceholder.typicode.com/users"
 
-if __name__ == '__main__':
-    employeeId = sys.argv[1]
-    baseUrl = "https://jsonplaceholder.typicode.com/users"
+def employee_todo(employeeId):
     url = baseUrl + "/" + employeeId
 
     response = requests.get(url)
@@ -24,9 +23,11 @@ if __name__ == '__main__':
             done_tasks.append(task)
             done += 1
 
-    print("")
     print("Employee {} is done with tasks({}/{}):"
           .format(employeeName, done, len(tasks)))
 
     for task in done_tasks:
         print("\t {}".format(task.get('title')))
+
+if __name__ == "__main__":
+    employee_todo(int(sys.argv[1]))
