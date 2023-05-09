@@ -14,7 +14,7 @@ def count_words(subreddit, word_list, instances={}, after="", count=0):
     """
     url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
     headers = {
-        "User-Agent": "linux:0x16.api.advanced"
+        "User-Agent": "linux:0x16.api.advanced:v1.0.0 (by /u/bdov_)"
     }
     params = {
         "after": after,
@@ -49,6 +49,22 @@ def count_words(subreddit, word_list, instances={}, after="", count=0):
             print("")
             return
         instances = sorted(instances.items(), key=lambda kv: (-kv[1], kv[0]))
-        [print("{}: {}".format(k, v)) for k, v in instances]
+        print(instances)
+        
+        instances2 = []
+
+        for item in instances:
+            index = None
+            for i, itemx in enumerate(instances2):
+                if itemx[0].lower() == item[0].lower():
+                    index = i
+                    break
+            
+            if index is not None:
+                instances2[index] = (item[0].lower(), instances2[index][1] + item[1])
+            else:
+                instances2.append((item[0].lower(), item[1]))
+
+        [print("{}: {}".format(k, v)) for k, v in instances2]
     else:
         count_words(subreddit, word_list, instances, after, count)
