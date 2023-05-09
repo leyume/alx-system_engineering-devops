@@ -48,9 +48,8 @@ def count_words(subreddit, word_list, instances={}, after="", count=0):
         if len(instances) == 0:
             print("")
             return
-        instances = sorted(instances.items(), key=lambda kv: (-kv[1], kv[0]))
-        print(instances)
         
+        instances = sorted(instances.items(), key=lambda kv: (-kv[1], kv[0]))
         instances2 = []
 
         for item in instances:
