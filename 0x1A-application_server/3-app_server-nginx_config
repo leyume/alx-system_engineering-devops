@@ -18,11 +18,7 @@
 
 # Default server configuration
 #
-#upstream backend_server {
-#	server 172.67.179.206;
-#	server 52.86.102.6:80;
-#}
-#
+
 server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
