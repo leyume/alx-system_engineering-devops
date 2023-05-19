@@ -1,5 +1,5 @@
 [Unit]
-Description=Gunicorn instance to serve AirBnB_clone_v4 web_dynamic/2-hbnb.py
+Description=Gunicorn instance  to serve AirBnB_clone_v4 web_dynamic/2-hbnb.py
 After=network.target
 
 [Service]
