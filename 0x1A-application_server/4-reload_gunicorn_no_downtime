@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# gracefully restarts gunicorn
+
+xargs kill -HUP < /tmp/pid
